@@ -1,0 +1,27 @@
+{
+    "name": "andrewshell/invoice",
+    "type": "project",
+    "description": "Simple Invoice Generator",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Andrew Shell",
+            "email": "andrew@andrewshell.org"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.0",
+        "radar/adr": "~1.0",
+        "relay/middleware": "~1.0",
+        "zendframework/zend-diactoros": "~1.0",
+        "symfony/yaml": "^3.0",
+        "twig/twig": "^1.23"
+    },
+    "autoload": {
+        "psr-4": {
+            "Invoice\\Application\\": "src/Application/",
+            "Invoice\\Domain\\": "src/Domain/"
+        }
+    },
+    "minimum-stability": "dev"
+}

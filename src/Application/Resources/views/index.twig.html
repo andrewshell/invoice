@@ -1,0 +1,17 @@
+{% extends "layout.twig.html" %}
+
+{% block body %}
+<div class="container">
+    <div class="page-header">
+        <h1>Invoices</h1>
+    </div>
+    <ul class="list-unstyled">
+    {% if invoices is empty %}
+        <li>No invoices found</li>
+    {% endif %}
+    {% for invoice in invoices %}
+        <li>{{ invoice.date | date('Y-m-d') }} <a href="/{{ invoice.number }}">{% if invoice.client is defined %}{{ invoice.client.name }}{% endif %} ({{ invoice.number }})</a></li>
+    {% endfor %}
+    </ul>
+</div>
+{% endblock body %}

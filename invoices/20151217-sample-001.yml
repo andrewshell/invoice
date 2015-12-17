@@ -1,0 +1,13 @@
+number: sample-001
+date: 2015-12-17
+client:
+    name: Best Client, Inc.
+    address:
+        - Frank Furter
+        - 867 Boundary Street
+        - St Augustine, FL 32084
+items:
+    - desc: Zany Doo Hair Salon Website
+      unit_cost: 120
+      quantity: 10
+paid: 0
