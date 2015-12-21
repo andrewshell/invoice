@@ -17,7 +17,7 @@ Freshbooks (or the cost) so I whipped this up.
 If you're technical enough to use this app you're probably technical enough
 to customize it.
 
-Fork the repo and the [twig](http://twig.sensiolabs.org/) templates are all in `src/Application/Resources/views`
+Fork the repo and the [twig](http://twig.sensiolabs.org/) templates are all in `src/Radar/Resources/views`
 
 If you have specific requests for me I might consider expanding the scope of this
 project.  [Submit an issue](https://github.com/andrewshell/invoice/issues) or

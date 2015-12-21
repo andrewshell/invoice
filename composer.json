@@ -19,7 +19,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Invoice\\Application\\": "src/Application/",
+            "Invoice\\Radar\\": "src/Radar/",
             "Invoice\\Domain\\": "src/Domain/"
         }
     },

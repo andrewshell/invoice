@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a2f8e77889515926068b2a28e46f3fce",
+    "hash": "2d6357041d5c7e8908dd0319c227692f",
     "content-hash": "8497c9b452f26bdacb9b68e6486e7f01",
     "packages": [
         {
@@ -60,12 +60,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/auraphp/Aura.Di.git",
-                "reference": "c89ca388e67e76ddc37f1ee65bf406980a28dc87"
+                "reference": "71dd6bd70b64676dfbee9f9be861449d6ae10f28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/auraphp/Aura.Di/zipball/c89ca388e67e76ddc37f1ee65bf406980a28dc87",
-                "reference": "c89ca388e67e76ddc37f1ee65bf406980a28dc87",
+                "url": "https://api.github.com/repos/auraphp/Aura.Di/zipball/71dd6bd70b64676dfbee9f9be861449d6ae10f28",
+                "reference": "71dd6bd70b64676dfbee9f9be861449d6ae10f28",
                 "shasum": ""
             },
             "require": {
@@ -101,7 +101,7 @@
                 "di",
                 "di container"
             ],
-            "time": "2015-10-06 01:13:04"
+            "time": "2015-12-21 18:54:17"
         },
         {
             "name": "aura/payload",
@@ -435,12 +435,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/relayphp/Relay.Relay.git",
-                "reference": "277638ddafe184550d9c2441c23dd911d605a5ce"
+                "reference": "e835fc45351b7a92a6fdf2a36be7bd59ef56c8ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/relayphp/Relay.Relay/zipball/277638ddafe184550d9c2441c23dd911d605a5ce",
-                "reference": "277638ddafe184550d9c2441c23dd911d605a5ce",
+                "url": "https://api.github.com/repos/relayphp/Relay.Relay/zipball/e835fc45351b7a92a6fdf2a36be7bd59ef56c8ae",
+                "reference": "e835fc45351b7a92a6fdf2a36be7bd59ef56c8ae",
                 "shasum": ""
             },
             "require": {
@@ -472,7 +472,7 @@
                 "middleware",
                 "psr-7"
             ],
-            "time": "2015-10-14 20:15:30"
+            "time": "2015-12-17 18:18:30"
         },
         {
             "name": "symfony/yaml",

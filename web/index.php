@@ -17,7 +17,7 @@ require '../vendor/autoload.php';
 
 $boot = new Boot();
 $adr = $boot->adr([
-    'Invoice\Application\Config',
+    'Invoice\Radar\Config',
 ]);
 
 /**
@@ -31,7 +31,7 @@ $adr->middle('Radar\Adr\Handler\ActionHandler');
 /**
  * Responder
  */
-$adr->responder('Invoice\Application\Responder');
+$adr->responder('Invoice\Radar\Responder');
 
 /**
  * Routes
