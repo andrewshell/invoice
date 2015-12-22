@@ -17,10 +17,19 @@
         "symfony/yaml": "^3.0",
         "twig/twig": "^1.23"
     },
+    "require-dev": {
+        "phpunit/phpunit": "~4.6",
+        "mikey179/vfsStream": "~1"
+    },
     "autoload": {
         "psr-4": {
-            "Invoice\\Radar\\": "src/Radar/",
-            "Invoice\\Domain\\": "src/Domain/"
+            "Invoice\\": "src/Invoice/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Invoice\\": "tests/Invoice/",
+            "Aura\\Di\\": "vendor/aura/di/tests/"
         }
     },
     "minimum-stability": "dev"

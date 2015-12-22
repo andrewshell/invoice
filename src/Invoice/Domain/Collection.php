@@ -32,20 +32,18 @@ class Collection
 
     protected function readInvoices()
     {
-        static $invoices = array();
-        if (empty($invoices)) {
-            $invoiceFiles = scandir($this->path);
-            foreach ($invoiceFiles as $filename) {
-                if ('_' == $filename[0]) {
-                    continue;
-                }
-                $invoice = $this->readInvoice($filename);
-                if (is_array($invoice)) {
-                    $invoices[$invoice['number']] = $invoice;
-                }
+        $invoices = array();
+        $invoiceFiles = scandir($this->path);
+        foreach ($invoiceFiles as $filename) {
+            if ('_' == $filename[0]) {
+                continue;
             }
-            uasort($invoices, [$this, 'dateDecrementingSort']);
+            $invoice = $this->readInvoice($filename);
+            if (is_array($invoice)) {
+                $invoices[$invoice['number']] = $invoice;
+            }
         }
+        uasort($invoices, [$this, 'dateDecrementingSort']);
         return $invoices;
     }
 
@@ -54,6 +52,10 @@ class Collection
         $fullPath = $this->path . '/' . $filename;
         if (file_exists($fullPath) && preg_match('!\.yml$!', $fullPath)) {
             $invoice = $this->yaml->parse(file_get_contents($fullPath));
+            if (!is_array($invoice)) {
+                $invoice = [];
+            }
+            $invoice = array_merge($this->readGlobalData(), $invoice);
             $invoice['subtotal'] = 0;
             if (empty($invoice['number'])) {
                 $invoice['number'] = basename($filename, '.yml');
@@ -69,24 +71,22 @@ class Collection
             if (empty($invoice['items'])) {
                 $invoice['items'] = array();
             }
-            if (!is_array($invoice['items'])) {
-                $invoice['items'] = array($invoice['items']);
-            }
-            foreach (array_keys($invoice['items']) as $i) {
-                if (empty($invoice['items'][$i]['desc'])) {
-                    $invoice['items'][$i]['desc'] = 'Unknown Item';
+            if (is_array($invoice['items'])) {
+                foreach (array_keys($invoice['items']) as $i) {
+                    if (empty($invoice['items'][$i]['desc'])) {
+                        $invoice['items'][$i]['desc'] = 'Unknown Item';
+                    }
+                    if (empty($invoice['items'][$i]['unit_cost'])) {
+                        $invoice['items'][$i]['unit_cost'] = 0;
+                    }
+                    if (empty($invoice['items'][$i]['quantity'])) {
+                        $invoice['items'][$i]['quantity'] = 1;
+                    }
+                    $invoice['items'][$i]['price'] = ($invoice['items'][$i]['unit_cost'] * $invoice['items'][$i]['quantity']);
+                    $invoice['subtotal'] += $invoice['items'][$i]['price'];
                 }
-                if (empty($invoice['items'][$i]['unit_cost'])) {
-                    $invoice['items'][$i]['unit_cost'] = 0;
-                }
-                if (empty($invoice['items'][$i]['quantity'])) {
-                    $invoice['items'][$i]['quantity'] = 1;
-                }
-                $invoice['items'][$i]['price'] = ($invoice['items'][$i]['unit_cost'] * $invoice['items'][$i]['quantity']);
-                $invoice['subtotal'] += $invoice['items'][$i]['price'];
             }
             $invoice['total'] = $invoice['subtotal'] - $invoice['paid'];
-            $invoice = array_merge($this->readGlobalData(), $invoice);
         } else {
             $invoice = null;
         }
@@ -95,26 +95,22 @@ class Collection
 
     function readGlobalData()
     {
-        static $globalData;
-
+        $filename = '_global.yml';
+        $fullPath = $this->path . '/' . $filename;
+        if (file_exists($fullPath)) {
+            $globalData = $this->yaml->parse(file_get_contents($fullPath));
+        }
         if (empty($globalData)) {
-            $filename = '_global.yml';
-            $fullPath = $this->path . '/' . $filename;
-            if (file_exists($fullPath)) {
-                $globalData = $this->yaml->parse(file_get_contents($fullPath));
-            }
-            if (empty($globalData)) {
-                $globalData = array();
-            }
+            $globalData = array();
         }
 
         return $globalData;
     }
 
     function dateDecrementingSort($a, $b) {
-        if ($a == $b) {
+        if ($a['date'] == $b['date']) {
             return 0;
         }
-        return ($a > $b) ? -1 : 1;
+        return ($a['date'] > $b['date']) ? -1 : 1;
     }
 }

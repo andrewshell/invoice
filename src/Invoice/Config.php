@@ -1,5 +1,5 @@
 <?php
-namespace Invoice\Radar;
+namespace Invoice;
 
 use Aura\Di\Container;
 use Aura\Di\ContainerConfig;
@@ -41,7 +41,7 @@ class Config extends ContainerConfig
         /**
          * Responder
          */
-        $di->params['Invoice\Radar\Responder']['twig'] = $di->lazyNew('Twig_Environment');
+        $di->params['Invoice\Responder']['twig'] = $di->lazyNew('Twig_Environment');
     }
 
     public function modify(Container $di)
