@@ -1,5 +1,8 @@
 Stupid Simple Invoices
-----------------------
+======================
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/andrewshell/invoice/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/andrewshell/invoice/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/andrewshell/invoice/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/andrewshell/invoice/?branch=master)
+[![Build Status](https://travis-ci.org/andrewshell/invoice.svg?branch=master)](https://travis-ci.org/andrewshell/invoice)
 
 I needed a quick tool to track and generate invoices for my small random
 freelance jobs.  I didn't need the advanced features of a tool like

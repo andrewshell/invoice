@@ -13,7 +13,7 @@ class Index
         $this->invoices = $invoices;
     }
 
-    public function __invoke(array $input)
+    public function __invoke()
     {
         return [
             'success' => true,

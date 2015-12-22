@@ -73,15 +73,14 @@ class Collection
             }
             if (is_array($invoice['items'])) {
                 foreach (array_keys($invoice['items']) as $i) {
-                    if (empty($invoice['items'][$i]['desc'])) {
-                        $invoice['items'][$i]['desc'] = 'Unknown Item';
-                    }
-                    if (empty($invoice['items'][$i]['unit_cost'])) {
-                        $invoice['items'][$i]['unit_cost'] = 0;
-                    }
-                    if (empty($invoice['items'][$i]['quantity'])) {
-                        $invoice['items'][$i]['quantity'] = 1;
-                    }
+                    $invoice['items'][$i] = array_merge(
+                        [
+                            'desc' => 'Unknown Item',
+                            'unit_cost' => 0,
+                            'quantity' => 1,
+                        ],
+                        $invoice['items'][$i]
+                    );
                     $invoice['items'][$i]['price'] = ($invoice['items'][$i]['unit_cost'] * $invoice['items'][$i]['quantity']);
                     $invoice['subtotal'] += $invoice['items'][$i]['price'];
                 }
@@ -93,7 +92,7 @@ class Collection
         return $invoice;
     }
 
-    function readGlobalData()
+    protected function readGlobalData()
     {
         $filename = '_global.yml';
         $fullPath = $this->path . '/' . $filename;
@@ -107,7 +106,7 @@ class Collection
         return $globalData;
     }
 
-    function dateDecrementingSort($a, $b) {
+    protected function dateDecrementingSort($a, $b) {
         if ($a['date'] == $b['date']) {
             return 0;
         }
