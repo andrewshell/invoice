@@ -1,24 +1,25 @@
 <?php
-namespace Invoice\Domain;
+namespace Invoice\Puli;
 
+use Puli\Repository\InMemoryRepository;
+use Puli\Repository\Tests\Resource\TestFile;
 use Symfony\Component\Yaml\Parser;
-use org\bovigo\vfs\vfsStream;
-use org\bovigo\vfs\vfsStreamDirectory;
-use org\bovigo\vfs\vfsStreamWrapper;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class MapperTest extends \PHPUnit_Framework_TestCase
 {
+    protected $repo;
+    protected $mapper;
+
     public function setUp()
     {
-        vfsStream::setup('invoices');
+        $this->repo = new InMemoryRepository();
         $yaml = new Parser();
-        $this->invoicePath = vfsStream::url('invoices');
-        $this->collection = new Collection($this->invoicePath, $yaml);
+        $this->mapper = new Mapper($this->repo, $yaml);
     }
 
     public function testEmptyDirectory()
     {
-        $invoices = $this->collection->all();
+        $invoices = $this->mapper->all();
 
         $this->assertInternalType('array', $invoices);
         $this->assertEmpty($invoices);
@@ -26,14 +27,14 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testSingleEmptyFileWithoutGlobal()
     {
-        file_put_contents($this->invoicePath . '/sample.yml', '');
+        $this->repo->add('/app/invoices/sample.yml', new TestFile('/sample.yml', ''));
 
-        $invoices = $this->collection->all();
+        $invoices = $this->mapper->all();
 
         $defaults = array(
             'subtotal' => 0,
             'number' => 'sample',
-            'date' => filemtime($this->invoicePath . '/sample.yml'),
+            'date' => 0,
             'paid' => 0,
             'items' => [],
             'total' => 0,
@@ -52,10 +53,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testSingleEmptyFileWithGlobal()
     {
-        file_put_contents($this->invoicePath . '/_global.yml', 'date: "2015-12-22"');
-        file_put_contents($this->invoicePath . '/sample.yml', '');
+        $this->repo->add('/app/invoices/_global.yml', new TestFile('/_global.yml', 'date: "2015-12-22"'));
+        $this->repo->add('/app/invoices/sample.yml', new TestFile('/sample.yml', ''));
 
-        $invoices = $this->collection->all();
+        $invoices = $this->mapper->all();
 
         $defaults = array(
             'subtotal' => 0,
@@ -79,11 +80,11 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testMultipleFilesOrderByDate()
     {
-        file_put_contents($this->invoicePath . '/sample1.yml', 'date: "2015-12-22"');
-        file_put_contents($this->invoicePath . '/sample2.yml', 'date: "2015-12-21"');
-        file_put_contents($this->invoicePath . '/sample3.yml', 'date: "2015-12-22"');
+        $this->repo->add('/app/invoices/sample1.yml', new TestFile('/sample1.yml', 'date: "2015-12-22"'));
+        $this->repo->add('/app/invoices/sample2.yml', new TestFile('/sample2.yml', 'date: "2015-12-21"'));
+        $this->repo->add('/app/invoices/sample3.yml', new TestFile('/sample3.yml', 'date: "2015-12-22"'));
 
-        $invoices = $this->collection->all();
+        $invoices = $this->mapper->all();
 
         $this->assertInternalType('array', $invoices);
         $this->assertCount(3, $invoices);
@@ -95,15 +96,18 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testSingleFileByNumber()
     {
-        file_put_contents(
-            $this->invoicePath . '/sample.yml',
-            "number: inv-123\n" .
-            "date: 2015-12-22\n" .
-            "items:\n" .
-            "    - other: value\n"
+        $this->repo->add(
+            '/app/invoices/sample.yml',
+            new TestFile(
+                '/sample.yml',
+                "number: inv-123\n" .
+                "date: 2015-12-22\n" .
+                "items:\n" .
+                "    - other: value\n"
+            )
         );
 
-        $invoice = $this->collection->byNumber('inv-123');
+        $invoice = $this->mapper->byNumber('inv-123');
 
         $defaults = array(
             'other' => 'value',
@@ -126,7 +130,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testMissingFileByNumber()
     {
-        $invoice = $this->collection->byNumber('missing');
+        $invoice = $this->mapper->byNumber('missing');
 
         $this->assertNull($invoice);
     }

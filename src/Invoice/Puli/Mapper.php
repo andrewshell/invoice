@@ -3,6 +3,7 @@ namespace Invoice\Puli;
 
 use Invoice\Domain\Mapper as DomainMapper;
 use Puli\Repository\Api\ResourceRepository;
+use Puli\Repository\Api\Resource\Resource;
 use Symfony\Component\Yaml\Parser;
 
 class Mapper implements DomainMapper
@@ -39,7 +40,7 @@ class Mapper implements DomainMapper
             if ('_' == $filename[0]) {
                 continue;
             }
-            $invoice = $this->readInvoice($resource->getFilesystemPath());
+            $invoice = $this->readInvoice($resource);
             if (is_array($invoice)) {
                 $invoices[$invoice['number']] = $invoice;
             }
@@ -48,48 +49,44 @@ class Mapper implements DomainMapper
         return $invoices;
     }
 
-    protected function readInvoice($path)
+    protected function readInvoice(Resource $resource)
     {
-        $filename = basename($path);
-        if (file_exists($path) && preg_match('!\.yml$!', $path)) {
-            $invoice = $this->yaml->parse(file_get_contents($path));
-            if (!is_array($invoice)) {
-                $invoice = [];
-            }
-            $invoice = array_merge($this->readGlobalData(), $invoice);
-            $invoice['subtotal'] = 0;
-            if (empty($invoice['number'])) {
-                $invoice['number'] = basename($filename, '.yml');
-            }
-            if (empty($invoice['date'])) {
-                $invoice['date'] = filemtime($path);
-            } elseif (is_string($invoice['date'])) {
-                $invoice['date'] = strtotime($invoice['date']);
-            }
-            if (empty($invoice['paid'])) {
-                $invoice['paid'] = 0;
-            }
-            if (empty($invoice['items'])) {
-                $invoice['items'] = array();
-            }
-            if (is_array($invoice['items'])) {
-                foreach (array_keys($invoice['items']) as $i) {
-                    $invoice['items'][$i] = array_merge(
-                        [
-                            'desc' => 'Unknown Item',
-                            'unit_cost' => 0,
-                            'quantity' => 1,
-                        ],
-                        $invoice['items'][$i]
-                    );
-                    $invoice['items'][$i]['price'] = ($invoice['items'][$i]['unit_cost'] * $invoice['items'][$i]['quantity']);
-                    $invoice['subtotal'] += $invoice['items'][$i]['price'];
-                }
-            }
-            $invoice['total'] = $invoice['subtotal'] - $invoice['paid'];
-        } else {
-            $invoice = null;
+        $invoice = $this->yaml->parse($resource->getBody());
+        if (!is_array($invoice)) {
+            $invoice = [];
         }
+        $invoice = array_merge($this->readGlobalData(), $invoice);
+        $invoice['subtotal'] = 0;
+        if (empty($invoice['number'])) {
+            $invoice['number'] = basename($resource->getName(), '.yml');
+        }
+        if (empty($invoice['date'])) {
+            $invoice['date'] = 0;
+        } elseif (is_string($invoice['date'])) {
+            $invoice['date'] = strtotime($invoice['date']);
+        }
+        if (empty($invoice['paid'])) {
+            $invoice['paid'] = 0;
+        }
+        if (empty($invoice['items'])) {
+            $invoice['items'] = array();
+        }
+        if (is_array($invoice['items'])) {
+            foreach (array_keys($invoice['items']) as $i) {
+                $invoice['items'][$i] = array_merge(
+                    [
+                        'desc' => 'Unknown Item',
+                        'unit_cost' => 0,
+                        'quantity' => 1,
+                    ],
+                    $invoice['items'][$i]
+                );
+                $invoice['items'][$i]['price'] = ($invoice['items'][$i]['unit_cost'] * $invoice['items'][$i]['quantity']);
+                $invoice['subtotal'] += $invoice['items'][$i]['price'];
+            }
+        }
+        $invoice['total'] = $invoice['subtotal'] - $invoice['paid'];
+
         return $invoice;
     }
 

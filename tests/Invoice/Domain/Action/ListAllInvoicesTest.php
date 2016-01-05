@@ -1,18 +1,18 @@
 <?php
-namespace Invoice\Domain;
+namespace Invoice\Domain\Action;
 
-class IndexTest extends \PHPUnit_Framework_TestCase
+class ListAllInvoicesTest extends \PHPUnit_Framework_TestCase
 {
     public function testIndex()
     {
-        $collection = $this->getMockBuilder('Invoice\\Domain\\Collection')
+        $mapper = $this->getMockBuilder('Invoice\\Domain\\Mapper')
                      ->disableOriginalConstructor()
                      ->getMock();
 
-        $collection->method('all')
+        $mapper->method('all')
              ->willReturn([]);
 
-        $index = new Index($collection);
+        $index = new ListAllInvoices($mapper);
         $payload = $index([]);
 
         $this->assertArrayHasKey('success', $payload);

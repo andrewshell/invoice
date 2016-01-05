@@ -12,8 +12,8 @@ class ResponderTest extends \PHPUnit_Framework_TestCase
     public function setup()
     {
         $loader = new \Twig_Loader_Array([
-            'default.twig.html' => 'default:{{ content }}',
-            'notfound.twig.html' => 'notfound:{{ message }}',
+            '/app/views/default.twig.html' => 'default:{{ content }}',
+            '/app/views/notfound.twig.html' => 'notfound:{{ message }}',
         ]);
         $twig = new \Twig_Environment($loader);
 
@@ -29,7 +29,7 @@ class ResponderTest extends \PHPUnit_Framework_TestCase
 
     protected function getResponse($payload)
     {
-        $request = ServerRequestFactory::fromGlobals()->withAttribute('_view', 'default.twig.html');
+        $request = ServerRequestFactory::fromGlobals()->withAttribute('_view', '/app/views/default.twig.html');
         $response = new Response();
         return $payload
             ? $this->responder->__invoke($request, $response, $payload)

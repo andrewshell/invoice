@@ -37,11 +37,6 @@
             "installer": "composer",
             "env": "dev"
         },
-        "mikey179/vfsstream": {
-            "install-path": "vendor/mikey179/vfsStream",
-            "installer": "composer",
-            "env": "dev"
-        },
         "phpdocumentor/reflection-docblock": {
             "install-path": "vendor/phpdocumentor/reflection-docblock",
             "installer": "composer",

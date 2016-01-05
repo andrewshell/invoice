@@ -22,8 +22,7 @@
         "webmozart/key-value-store": "1.0.0-beta6"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.6",
-        "mikey179/vfsStream": "~1"
+        "phpunit/phpunit": "~4.6"
     },
     "autoload": {
         "psr-4": {
@@ -33,7 +32,8 @@
     "autoload-dev": {
         "psr-4": {
             "Invoice\\": "tests/Invoice/",
-            "Aura\\Di\\": "vendor/aura/di/tests/"
+            "Aura\\Di\\": "vendor/aura/di/tests/",
+            "Puli\\Repository\\Tests\\": "vendor/puli/repository/tests/"
         }
     },
     "minimum-stability": "dev"

@@ -9,11 +9,6 @@ class Config extends ContainerConfig
     public function define(Container $di)
     {
         /**
-         * Values
-         */
-        $viewPath = __DIR__ . '/../../res/views';
-
-        /**
          * Services
          */
         $di->set('puli:factory', $di->lazyNew(PULI_FACTORY_CLASS));

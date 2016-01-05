@@ -1,18 +1,18 @@
 <?php
-namespace Invoice\Domain;
+namespace Invoice\Domain\Action;
 
-class InvoiceTest extends \PHPUnit_Framework_TestCase
+class ViewSingleInvoiceTest extends \PHPUnit_Framework_TestCase
 {
     public function testInvoiceFound()
     {
-        $collection = $this->getMockBuilder('Invoice\\Domain\\Collection')
+        $mapper = $this->getMockBuilder('Invoice\\Domain\\Mapper')
                      ->disableOriginalConstructor()
                      ->getMock();
 
-        $collection->method('byNumber')
+        $mapper->method('byNumber')
              ->willReturn(['number' => 'sample']);
 
-        $index = new Invoice($collection);
+        $index = new ViewSingleInvoice($mapper);
         $payload = $index(['number' => 'sample']);
 
         $this->assertArrayHasKey('success', $payload);
@@ -25,14 +25,14 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
 
     public function testInvoiceNotFound()
     {
-        $collection = $this->getMockBuilder('Invoice\\Domain\\Collection')
+        $mapper = $this->getMockBuilder('Invoice\\Domain\\Mapper')
                      ->disableOriginalConstructor()
                      ->getMock();
 
-        $collection->method('byNumber')
+        $mapper->method('byNumber')
              ->willReturn(null);
 
-        $index = new Invoice($collection);
+        $index = new ViewSingleInvoice($mapper);
         $payload = $index(['number' => 'sample']);
 
         $this->assertArrayHasKey('success', $payload);
