@@ -5,6 +5,8 @@ php:
   - 7
   - hhvm
 before_script:
+  - wget https://github.com/puli/cli/releases/download/1.0.0-beta9/puli.phar
+  - php puli.phar self-update
   - composer self-update
   - composer install
 script:
