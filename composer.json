@@ -16,6 +16,7 @@
         "zendframework/zend-diactoros": "~1.0",
         "symfony/yaml": "^3.0",
         "twig/twig": "^1.23",
+        "puli/cli": "1.0.0-beta9",
         "puli/composer-plugin": "1.0.0-beta8",
         "puli/repository": "1.0.0-beta8",
         "puli/twig-extension": "1.0.0-beta7",
