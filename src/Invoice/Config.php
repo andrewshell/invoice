@@ -11,41 +11,50 @@ class Config extends ContainerConfig
         /**
          * Values
          */
-        $invoicePath = __DIR__ . '/../../invoices';
-        $viewPath = __DIR__ . '/Resources/views';
+        $viewPath = __DIR__ . '/../../res/views';
 
         /**
-         * Invoice Collection
+         * Services
          */
-        $di->params['Invoice\Domain\Collection']['path'] = $invoicePath;
-        $di->params['Invoice\Domain\Collection']['yaml'] = $di->lazyNew('Symfony\Component\Yaml\Parser');
+        $di->set('puli:factory', $di->lazyNew(PULI_FACTORY_CLASS));
+        $di->set('puli:repo', $di->lazyGetCall('puli:factory', 'createRepository'));
+        $di->set('invoice/domain:mapper', $di->lazyNew('Invoice\Puli\Mapper'));
+        $di->set('twig', $di->lazyNew('Twig_Environment'));
+
+        /**
+         * Invoice Mapper
+         */
+        $di->params['Invoice\Puli\Mapper']['repo'] = $di->lazyGet('puli:repo');
+        $di->params['Invoice\Puli\Mapper']['yaml'] = $di->lazyNew('Symfony\Component\Yaml\Parser');
 
         /**
          * Twig_Environment
          */
-        $di->params['Twig_Loader_Filesystem']['paths'] = [$viewPath];
-        $di->params['Twig_Environment']['loader'] = $di->lazyNew('Twig_Loader_Filesystem');
+        $di->params['Puli\TwigExtension\PuliTemplateLoader']['repo'] = $di->lazyGet('puli:repo');
+        $di->params['Puli\TwigExtension\PuliExtension']['repo'] = $di->lazyGet('puli:repo');
+        $di->params['Twig_Environment']['loader'] = $di->lazyNew('Puli\TwigExtension\PuliTemplateLoader');
         $di->params['Twig_Environment']['options'] = ['debug' => true, 'strict_variables' => true];
-        $di->setters['Twig_Environment']['addExtension'] = $di->lazyNew('Twig_Extension_Debug');
 
         /**
-         * Index
+         * ListAllInvoices
          */
-        $di->params['Invoice\Domain\Index']['invoices'] = $di->lazyNew('Invoice\Domain\Collection');
+        $di->params['Invoice\Domain\Action\ListAllInvoices']['mapper'] = $di->lazyGet('invoice/domain:mapper');
 
         /**
-         * Invoice
+         * ViewSingleInvoice
          */
-        $di->params['Invoice\Domain\Invoice']['invoices'] = $di->lazyNew('Invoice\Domain\Collection');
+        $di->params['Invoice\Domain\Action\ViewSingleInvoice']['mapper'] = $di->lazyGet('invoice/domain:mapper');
 
         /**
          * Responder
          */
-        $di->params['Invoice\Responder']['twig'] = $di->lazyNew('Twig_Environment');
+        $di->params['Invoice\Responder']['twig'] = $di->lazyGet('twig');
     }
 
     public function modify(Container $di)
     {
-
+        $twig = $di->get('twig');
+        $twig->addExtension($di->newInstance('Twig_Extension_Debug'));
+        $twig->addExtension($di->newInstance('Puli\TwigExtension\PuliExtension'));
     }
 }

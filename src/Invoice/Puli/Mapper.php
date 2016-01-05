@@ -1,17 +1,18 @@
 <?php
-namespace Invoice\Domain;
+namespace Invoice\Puli;
 
+use Invoice\Domain\Mapper as DomainMapper;
+use Puli\Repository\Api\ResourceRepository;
 use Symfony\Component\Yaml\Parser;
-use Twig_Environment;
 
-class Collection
+class Mapper implements DomainMapper
 {
-    protected $path;
+    protected $repo;
     protected $yaml;
 
-    public function __construct($path, Parser $yaml)
+    public function __construct(ResourceRepository $repo, Parser $yaml)
     {
-        $this->path = $path;
+        $this->repo = $repo;
         $this->yaml = $yaml;
     }
 
@@ -33,12 +34,12 @@ class Collection
     protected function readInvoices()
     {
         $invoices = array();
-        $invoiceFiles = scandir($this->path);
-        foreach ($invoiceFiles as $filename) {
+        foreach ($this->repo->find('/app/invoices/*.yml') as $resource) {
+            $filename = $resource->getName();
             if ('_' == $filename[0]) {
                 continue;
             }
-            $invoice = $this->readInvoice($filename);
+            $invoice = $this->readInvoice($resource->getFilesystemPath());
             if (is_array($invoice)) {
                 $invoices[$invoice['number']] = $invoice;
             }
@@ -47,11 +48,11 @@ class Collection
         return $invoices;
     }
 
-    protected function readInvoice($filename)
+    protected function readInvoice($path)
     {
-        $fullPath = $this->path . '/' . $filename;
-        if (file_exists($fullPath) && preg_match('!\.yml$!', $fullPath)) {
-            $invoice = $this->yaml->parse(file_get_contents($fullPath));
+        $filename = basename($path);
+        if (file_exists($path) && preg_match('!\.yml$!', $path)) {
+            $invoice = $this->yaml->parse(file_get_contents($path));
             if (!is_array($invoice)) {
                 $invoice = [];
             }
@@ -61,7 +62,7 @@ class Collection
                 $invoice['number'] = basename($filename, '.yml');
             }
             if (empty($invoice['date'])) {
-                $invoice['date'] = filemtime($fullPath);
+                $invoice['date'] = filemtime($path);
             } elseif (is_string($invoice['date'])) {
                 $invoice['date'] = strtotime($invoice['date']);
             }
@@ -94,10 +95,9 @@ class Collection
 
     protected function readGlobalData()
     {
-        $filename = '_global.yml';
-        $fullPath = $this->path . '/' . $filename;
-        if (file_exists($fullPath)) {
-            $globalData = $this->yaml->parse(file_get_contents($fullPath));
+        if ($this->repo->contains('/app/invoices/_global.yml')) {
+            $contents = $this->repo->get('/app/invoices/_global.yml')->getBody();
+            $globalData = $this->yaml->parse($contents);
         }
         if (empty($globalData)) {
             $globalData = array();

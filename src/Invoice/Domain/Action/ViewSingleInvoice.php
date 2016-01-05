@@ -1,21 +1,22 @@
 <?php
-namespace Invoice\Domain;
+namespace Invoice\Domain\Action;
 
+use Invoice\Domain\Mapper;
 use Symfony\Component\Yaml\Parser;
 use Twig_Environment;
 
-class Invoice
+class ViewSingleInvoice
 {
-    protected $invoices;
+    protected $mapper;
 
-    public function __construct(Collection $invoices)
+    public function __construct(Mapper $mapper)
     {
-        $this->invoices = $invoices;
+        $this->mapper = $mapper;
     }
 
     public function __invoke(array $input)
     {
-        $invoice = $this->invoices->byNumber($input['number']);
+        $invoice = $this->mapper->byNumber($input['number']);
         if (is_null($invoice)) {
             return [
                 'success' => false,

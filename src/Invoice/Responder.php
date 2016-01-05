@@ -45,7 +45,7 @@ class Responder implements ResponderAcceptsInterface
     protected function htmlBody($data)
     {
         if (isset($data)) {
-            $view = $this->request->getAttribute('_view', 'layout.twig.html');
+            $view = $this->request->getAttribute('_view', '/app/views/layout.twig.html');
             $template = $this->twig->loadTemplate($view);
             $body = $template->render($data);
             $this->response = $this->response->withHeader('Content-Type', 'text/html');
@@ -62,7 +62,7 @@ class Responder implements ResponderAcceptsInterface
     protected function notFound()
     {
         $this->response = $this->response->withStatus(404);
-        $this->request = $this->request->withAttribute('_view', 'notfound.twig.html');
+        $this->request = $this->request->withAttribute('_view', '/app/views/notfound.twig.html');
         $this->htmlBody($this->payload);
     }
 }

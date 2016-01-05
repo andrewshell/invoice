@@ -36,10 +36,10 @@ $adr->responder('Invoice\Responder');
 /**
  * Routes
  */
-$adr->get('Index', '/', 'Invoice\Domain\Index')
-    ->defaults(['_view' => 'index.twig.html']);
-$adr->get('Invoice', '/{number}', 'Invoice\Domain\Invoice')
-    ->defaults(['_view' => 'invoice.twig.html']);
+$adr->get('ListAllInvoices', '/', 'Invoice\Domain\Action\ListAllInvoices')
+    ->defaults(['_view' => '/app/views/index.twig.html']);
+$adr->get('ViewSingleInvoice', '/{number}', 'Invoice\Domain\Action\ViewSingleInvoice')
+    ->defaults(['_view' => '/app/views/invoice.twig.html']);
 
 /**
  * Run
