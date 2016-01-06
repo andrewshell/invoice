@@ -3,7 +3,7 @@ namespace Invoice\Puli;
 
 use Invoice\Domain\Mapper as DomainMapper;
 use Puli\Repository\Api\ResourceRepository;
-use Puli\Repository\Api\Resource\Resource;
+use Puli\Repository\Api\Resource\BodyResource;
 use Symfony\Component\Yaml\Parser;
 
 class Mapper implements DomainMapper
@@ -49,7 +49,7 @@ class Mapper implements DomainMapper
         return $invoices;
     }
 
-    protected function readInvoice(Resource $resource)
+    protected function readInvoice(BodyResource $resource)
     {
         $invoice = $this->yaml->parse($resource->getBody());
         if (!is_array($invoice)) {
