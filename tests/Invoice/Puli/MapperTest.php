@@ -1,6 +1,7 @@
 <?php
 namespace Invoice\Puli;
 
+use Invoice\Domain\Normalizer;
 use Puli\Repository\InMemoryRepository;
 use Puli\Repository\Tests\Resource\TestFile;
 use Symfony\Component\Yaml\Parser;
@@ -14,7 +15,8 @@ class MapperTest extends \PHPUnit_Framework_TestCase
     {
         $this->repo = new InMemoryRepository();
         $yaml = new Parser();
-        $this->mapper = new Mapper($this->repo, $yaml);
+        $normalizer = new Normalizer();
+        $this->mapper = new Mapper($this->repo, $yaml, $normalizer);
     }
 
     public function testEmptyDirectory()

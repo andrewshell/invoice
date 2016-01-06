@@ -21,6 +21,7 @@ class Config extends ContainerConfig
          */
         $di->params['Invoice\Puli\Mapper']['repo'] = $di->lazyGet('puli:repo');
         $di->params['Invoice\Puli\Mapper']['yaml'] = $di->lazyNew('Symfony\Component\Yaml\Parser');
+        $di->params['Invoice\Puli\Mapper']['normalizer'] = $di->lazyNew('Invoice\Domain\Normalizer');
 
         /**
          * Twig_Environment
