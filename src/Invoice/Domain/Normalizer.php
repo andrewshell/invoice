@@ -1,9 +1,10 @@
-<?php
+<?php declare(strict_types = 1);
+
 namespace Invoice\Domain;
 
 class Normalizer
 {
-    public function normalize(array $invoice, $defaultNumber)
+    public function normalize(array $invoice, string $defaultNumber): array
     {
         $invoice['subtotal'] = 0;
         if (empty($invoice['number'])) {
@@ -30,7 +31,9 @@ class Normalizer
                     ],
                     $invoice['items'][$i]
                 );
-                $invoice['items'][$i]['price'] = ($invoice['items'][$i]['unit_cost'] * $invoice['items'][$i]['quantity']);
+                $invoice['items'][$i]['price'] = (
+                    $invoice['items'][$i]['unit_cost'] * $invoice['items'][$i]['quantity']
+                );
                 $invoice['subtotal'] += $invoice['items'][$i]['price'];
             }
         }

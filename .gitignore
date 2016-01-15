@@ -1,4 +1,5 @@
 .DS_Store
 .puli
 build
+cache.properties
 vendor

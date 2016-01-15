@@ -1,8 +1,9 @@
-<?php
+<?php declare(strict_types = 1);
+
 namespace Invoice\Domain;
 
 interface Mapper
 {
-    public function all();
-    public function byNumber($number);
+    public function all(): array;
+    public function byNumber(string $number): array;
 }

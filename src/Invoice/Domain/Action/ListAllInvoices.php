@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types = 1);
+
 namespace Invoice\Domain\Action;
 
 use Invoice\Domain\Mapper;
@@ -14,7 +15,7 @@ class ListAllInvoices
         $this->mapper = $mapper;
     }
 
-    public function __invoke()
+    public function __invoke(): array
     {
         return [
             'success' => true,

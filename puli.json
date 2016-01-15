@@ -41,6 +41,11 @@
             "install-path": "vendor/justinrainbow/json-schema",
             "installer": "composer"
         },
+        "myclabs/deep-copy": {
+            "install-path": "vendor/myclabs/deep-copy",
+            "installer": "composer",
+            "env": "dev"
+        },
         "padraic/humbug_get_contents": {
             "install-path": "vendor/padraic/humbug_get_contents",
             "installer": "composer"
@@ -176,6 +181,11 @@
             "installer": "composer",
             "env": "dev"
         },
+        "sebastian/resource-operations": {
+            "install-path": "vendor/sebastian/resource-operations",
+            "installer": "composer",
+            "env": "dev"
+        },
         "sebastian/version": {
             "install-path": "vendor/sebastian/version",
             "installer": "composer",
@@ -184,6 +194,11 @@
         "seld/jsonlint": {
             "install-path": "vendor/seld/jsonlint",
             "installer": "composer"
+        },
+        "squizlabs/php_codesniffer": {
+            "install-path": "vendor/squizlabs/php_codesniffer",
+            "installer": "composer",
+            "env": "dev"
         },
         "symfony/console": {
             "install-path": "vendor/symfony/console",

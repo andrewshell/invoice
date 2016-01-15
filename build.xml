@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="andrewshell-invoice" default="build">
+
+    <target name="build" depends="lint,phpcs,phpunit"/>
+
+    <target name="test" depends="phpunit"/>
+
+    <target name="clean" description="Cleanup build artifacts">
+        <delete dir="${basedir}/build/coverage"/>
+    </target>
+
+    <target name="prepare" depends="clean" description="Prepare for build">
+        <mkdir dir="${basedir}/build/coverage"/>
+    </target>
+
+    <target name="lint" description="Perform syntax check of sourcecode files">
+        <apply executable="php" failonerror="true">
+            <arg value="-l" />
+
+            <fileset dir="${basedir}/src">
+                <include name="**/*.php" />
+                <modified />
+            </fileset>
+
+            <fileset dir="${basedir}/tests">
+                <include name="**/*.php" />
+                <modified />
+            </fileset>
+        </apply>
+    </target>
+
+    <target name="phpcs"
+        description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.">
+        <exec executable="${basedir}/vendor/bin/phpcs">
+            <arg value="--standard=${basedir}/phpcs.xml" />
+            <arg path="${basedir}/src" />
+            <arg path="${basedir}/tests" />
+        </exec>
+    </target>
+
+    <target name="phpunit" description="Run all tests with PHPUnit">
+        <exec executable="${basedir}/vendor/bin/phpunit" failonerror="true" />
+    </target>
+
+    <target name="coverage" depends="prepare" description="Run all tests with PHPUnit and generate code coverage">
+        <exec executable="${basedir}/vendor/bin/phpunit" failonerror="true">
+            <arg value="--coverage-html" />
+            <arg path="${basedir}/build/coverage" />
+        </exec>
+    </target>
+</project>

@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types = 1);
+
 namespace Invoice;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -21,7 +22,7 @@ class Responder implements ResponderAcceptsInterface
         $this->twig = $twig;
     }
 
-    public static function accepts()
+    public static function accepts(): array
     {
         return ['text/html'];
     }
@@ -30,7 +31,7 @@ class Responder implements ResponderAcceptsInterface
         Request $request,
         Response $response,
         array $payload = null
-    ) {
+    ): Response {
         $this->request = $request;
         $this->response = $response;
         $this->payload = $payload;
@@ -42,7 +43,7 @@ class Responder implements ResponderAcceptsInterface
         return $this->response;
     }
 
-    protected function htmlBody($data)
+    protected function htmlBody(array $data)
     {
         if (isset($data)) {
             $view = $this->request->getAttribute('_view', '/app/views/layout.twig.html');

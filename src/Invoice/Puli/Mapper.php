@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types = 1);
+
 namespace Invoice\Puli;
 
 use Invoice\Domain\Mapper as DomainMapper;
@@ -20,22 +21,22 @@ class Mapper implements DomainMapper
         $this->normalizer = $normalizer;
     }
 
-    public function all()
+    public function all(): array
     {
         return $this->readInvoices();
     }
 
-    public function byNumber($number)
+    public function byNumber(string $number): array
     {
         $invoices = $this->readInvoices();
         if (isset($invoices[$number])) {
             return $invoices[$number];
         } else {
-            return null;
+            return array();
         }
     }
 
-    protected function readInvoices()
+    protected function readInvoices(): array
     {
         $invoices = array();
         foreach ($this->repo->find('/app/invoices/*.yml') as $resource) {
@@ -52,7 +53,7 @@ class Mapper implements DomainMapper
         return $invoices;
     }
 
-    protected function readInvoice(BodyResource $resource)
+    protected function readInvoice(BodyResource $resource): array
     {
         $invoice = $this->yaml->parse($resource->getBody());
         if (!is_array($invoice)) {
@@ -62,7 +63,7 @@ class Mapper implements DomainMapper
         return $this->normalizer->normalize($invoice, basename($resource->getName(), '.yml'));
     }
 
-    protected function readGlobalData()
+    protected function readGlobalData(): array
     {
         if ($this->repo->contains('/app/invoices/_global.yml')) {
             $contents = $this->repo->get('/app/invoices/_global.yml')->getBody();
@@ -75,7 +76,8 @@ class Mapper implements DomainMapper
         return $globalData;
     }
 
-    protected function dateDecrementingSort($a, $b) {
+    protected function dateDecrementingSort(array $a, array $b): int
+    {
         if ($a['date'] == $b['date']) {
             return 0;
         }

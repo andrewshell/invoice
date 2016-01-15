@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types = 1);
+
 namespace Invoice\Puli;
 
 use Invoice\Domain\Normalizer;
@@ -134,6 +135,6 @@ class MapperTest extends \PHPUnit_Framework_TestCase
     {
         $invoice = $this->mapper->byNumber('missing');
 
-        $this->assertNull($invoice);
+        $this->assertEmpty($invoice);
     }
 }

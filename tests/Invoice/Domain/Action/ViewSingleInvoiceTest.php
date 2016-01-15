@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types = 1);
+
 namespace Invoice\Domain\Action;
 
 class ViewSingleInvoiceTest extends \PHPUnit_Framework_TestCase
@@ -30,7 +31,7 @@ class ViewSingleInvoiceTest extends \PHPUnit_Framework_TestCase
                      ->getMock();
 
         $mapper->method('byNumber')
-             ->willReturn(null);
+             ->willReturn([]);
 
         $index = new ViewSingleInvoice($mapper);
         $payload = $index(['number' => 'sample']);
