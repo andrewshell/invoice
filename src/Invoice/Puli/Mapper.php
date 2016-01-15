@@ -66,8 +66,8 @@ class Mapper implements DomainMapper
     protected function readGlobalData(): array
     {
         if ($this->repo->contains('/app/invoices/_global.yml')) {
-            $contents = $this->repo->get('/app/invoices/_global.yml')->getBody();
-            $globalData = $this->yaml->parse($contents);
+            $resource = $this->repo->get('/app/invoices/_global.yml');
+            $globalData = $this->yaml->parse($resource->getBody());
         }
         if (empty($globalData)) {
             $globalData = array();
