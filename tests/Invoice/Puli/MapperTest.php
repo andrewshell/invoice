@@ -4,7 +4,6 @@ namespace Invoice\Puli;
 
 use Invoice\Domain\Normalizer;
 use Puli\Repository\InMemoryRepository;
-use Puli\Repository\Tests\Resource\TestFile;
 use Symfony\Component\Yaml\Parser;
 
 class MapperTest extends \PHPUnit_Framework_TestCase
