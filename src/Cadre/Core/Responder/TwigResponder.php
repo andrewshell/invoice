@@ -1,13 +1,13 @@
 <?php declare(strict_types = 1);
 
-namespace Invoice;
+namespace Cadre\Core\Responder;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Radar\Adr\Responder\ResponderAcceptsInterface;
 use Twig_Environment;
 
-class Responder implements ResponderAcceptsInterface
+class TwigResponder implements ResponderAcceptsInterface
 {
     protected $request;
 

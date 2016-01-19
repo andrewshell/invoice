@@ -17,6 +17,7 @@ require '../vendor/autoload.php';
 
 $boot = new Boot();
 $adr = $boot->adr([
+    'Cadre\Core\Config',
     'Invoice\Config',
 ]);
 
@@ -31,7 +32,7 @@ $adr->middle('Radar\Adr\Handler\ActionHandler');
 /**
  * Responder
  */
-$adr->responder('Invoice\Responder');
+$adr->responder('Cadre\Core\Responder\TwigResponder');
 
 /**
  * Routes

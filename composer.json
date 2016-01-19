@@ -28,14 +28,14 @@
     },
     "autoload": {
         "psr-4": {
+            "Cadre\\": "src/Cadre/",
             "Invoice\\": "src/Invoice/"
         }
     },
     "autoload-dev": {
         "psr-4": {
             "Invoice\\": "tests/Invoice/",
-            "Aura\\Di\\": "vendor/aura/di/tests/",
-            "Puli\\Repository\\Tests\\": "vendor/puli/repository/tests/"
+            "Aura\\Di\\": "vendor/aura/di/tests/"
         }
     },
     "minimum-stability": "dev"

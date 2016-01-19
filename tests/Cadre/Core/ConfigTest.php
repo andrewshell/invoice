@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Invoice;
+namespace Cadre\Core;
 
 use Aura\Di\AbstractContainerConfigTest;
 
@@ -10,23 +10,25 @@ class ConfigTest extends AbstractContainerConfigTest
     {
         return [
             'Cadre\Core\Config',
-            'Invoice\Config',
         ];
     }
 
     public function provideGet()
     {
         return [
-            ['invoice/domain:mapper', 'Invoice\Persistence\PuliMapper'],
+            ['puli:factory', PULI_FACTORY_CLASS],
+            ['puli:repo', 'Puli\Repository\Api\ResourceRepository'],
+            ['twig', 'Twig_Environment'],
         ];
     }
 
     public function provideNewInstance()
     {
         return [
-            ['Invoice\Persistence\PuliMapper'],
-            ['Invoice\Domain\Action\ListAllInvoices'],
-            ['Invoice\Domain\Action\ViewSingleInvoice'],
+            ['Cadre\Core\Responder\TwigResponder'],
+            ['Puli\TwigExtension\PuliExtension'],
+            ['Puli\TwigExtension\PuliTemplateLoader'],
+            ['Twig_Environment'],
         ];
     }
 }

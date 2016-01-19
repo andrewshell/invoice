@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Invoice\Puli;
+namespace Invoice\Persistence;
 
 use Invoice\Domain\Mapper as DomainMapper;
 use Invoice\Domain\Normalizer;
@@ -8,7 +8,7 @@ use Puli\Repository\Api\ResourceRepository;
 use Puli\Repository\Api\Resource\BodyResource;
 use Symfony\Component\Yaml\Parser;
 
-class Mapper implements DomainMapper
+class PuliMapper implements DomainMapper
 {
     protected $repo;
     protected $yaml;

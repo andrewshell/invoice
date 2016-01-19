@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Invoice\Puli;
+namespace Invoice\Persistence\Puli;
 
 use Puli\Repository\Api\Resource\ResourceMetadata;
 

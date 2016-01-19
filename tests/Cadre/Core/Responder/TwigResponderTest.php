@@ -1,11 +1,11 @@
 <?php declare(strict_types = 1);
 
-namespace Invoice;
+namespace Cadre\Core\Responder;
 
 use Zend\Diactoros\ServerRequestFactory;
 use Zend\Diactoros\Response;
 
-class ResponderTest extends \PHPUnit_Framework_TestCase
+class TwigResponderTest extends \PHPUnit_Framework_TestCase
 {
     protected $responder;
     protected $payload;
@@ -18,13 +18,13 @@ class ResponderTest extends \PHPUnit_Framework_TestCase
         ]);
         $twig = new \Twig_Environment($loader);
 
-        $this->responder = new Responder($twig);
+        $this->responder = new TwigResponder($twig);
     }
 
     public function testAccepts()
     {
         $expect = ['text/html'];
-        $actual = Responder::accepts();
+        $actual = TwigResponder::accepts();
         $this->assertSame($expect, $actual);
     }
 

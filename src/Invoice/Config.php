@@ -12,25 +12,14 @@ class Config extends ContainerConfig
         /**
          * Services
          */
-        $di->set('puli:factory', $di->lazyNew(PULI_FACTORY_CLASS));
-        $di->set('puli:repo', $di->lazyGetCall('puli:factory', 'createRepository'));
-        $di->set('invoice/domain:mapper', $di->lazyNew('Invoice\Puli\Mapper'));
-        $di->set('twig', $di->lazyNew('Twig_Environment'));
+        $di->set('invoice/domain:mapper', $di->lazyNew('Invoice\Persistence\PuliMapper'));
 
         /**
          * Invoice Mapper
          */
-        $di->params['Invoice\Puli\Mapper']['repo'] = $di->lazyGet('puli:repo');
-        $di->params['Invoice\Puli\Mapper']['yaml'] = $di->lazyNew('Symfony\Component\Yaml\Parser');
-        $di->params['Invoice\Puli\Mapper']['normalizer'] = $di->lazyNew('Invoice\Domain\Normalizer');
-
-        /**
-         * Twig_Environment
-         */
-        $di->params['Puli\TwigExtension\PuliTemplateLoader']['repo'] = $di->lazyGet('puli:repo');
-        $di->params['Puli\TwigExtension\PuliExtension']['repo'] = $di->lazyGet('puli:repo');
-        $di->params['Twig_Environment']['loader'] = $di->lazyNew('Puli\TwigExtension\PuliTemplateLoader');
-        $di->params['Twig_Environment']['options'] = ['debug' => true, 'strict_variables' => true];
+        $di->params['Invoice\Persistence\PuliMapper']['repo'] = $di->lazyGet('puli:repo');
+        $di->params['Invoice\Persistence\PuliMapper']['yaml'] = $di->lazyNew('Symfony\Component\Yaml\Parser');
+        $di->params['Invoice\Persistence\PuliMapper']['normalizer'] = $di->lazyNew('Invoice\Domain\Normalizer');
 
         /**
          * ListAllInvoices
@@ -41,11 +30,6 @@ class Config extends ContainerConfig
          * ViewSingleInvoice
          */
         $di->params['Invoice\Domain\Action\ViewSingleInvoice']['mapper'] = $di->lazyGet('invoice/domain:mapper');
-
-        /**
-         * Responder
-         */
-        $di->params['Invoice\Responder']['twig'] = $di->lazyGet('twig');
     }
 
     public function modify(Container $di)
