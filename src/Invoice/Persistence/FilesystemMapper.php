@@ -39,7 +39,7 @@ class FilesystemMapper implements DomainMapper
     {
         $invoices = array();
         $yamlMatch = $this->path . DIRECTORY_SEPARATOR . '*.yml';
-        foreach (glob($yamlMatch)  as $filename) {
+        foreach (glob($yamlMatch) as $filename) {
             if ('_' == basename($filename)[0]) {
                 continue;
             }
