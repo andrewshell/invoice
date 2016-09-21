@@ -17,8 +17,7 @@ class ConfigTest extends AbstractContainerConfigTest
     public function provideGet()
     {
         return [
-            ['puli:factory', PULI_FACTORY_CLASS],
-            ['puli:repo', 'Puli\Repository\Api\ResourceRepository'],
+            ['cadre/core:twig_responder', 'Cadre\Core\Responder\TwigResponder'],
             ['twig', 'Twig_Environment'],
         ];
     }
@@ -27,8 +26,7 @@ class ConfigTest extends AbstractContainerConfigTest
     {
         return [
             ['Cadre\Core\Responder\TwigResponder'],
-            ['Puli\TwigExtension\PuliExtension'],
-            ['Puli\TwigExtension\PuliTemplateLoader'],
+            ['Twig_Loader_Filesystem'],
             ['Twig_Environment'],
         ];
     }

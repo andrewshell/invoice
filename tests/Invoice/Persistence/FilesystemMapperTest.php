@@ -8,22 +8,16 @@ use Invoice\Persistence\Puli\TestFile;
 use Puli\Repository\InMemoryRepository;
 use Symfony\Component\Yaml\Parser;
 
-class PuliMapperTest extends \PHPUnit_Framework_TestCase
+class FilesystemMapperTest extends \PHPUnit_Framework_TestCase
 {
-    protected $repo;
-    protected $mapper;
-
-    public function setUp()
-    {
-        $this->repo = new InMemoryRepository();
-        $yaml = new Parser();
-        $normalizer = new Normalizer();
-        $this->mapper = new PuliMapper($this->repo, $yaml, $normalizer);
-    }
-
     public function testEmptyDirectory()
     {
-        $invoices = $this->mapper->all();
+        $path = __DIR__ . '/FilesystemMapper/empty-dir';
+        $yaml = new Parser();
+        $normalizer = new Normalizer();
+        $mapper = new FilesystemMapper($path, $yaml, $normalizer);
+
+        $invoices = $mapper->all();
 
         $this->assertInternalType('array', $invoices);
         $this->assertEmpty($invoices);
@@ -31,9 +25,12 @@ class PuliMapperTest extends \PHPUnit_Framework_TestCase
 
     public function testSingleEmptyFileWithoutGlobal()
     {
-        $this->repo->add('/app/invoices/sample.yml', new TestFile('/sample.yml', ''));
+        $path = __DIR__ . '/FilesystemMapper/empty-file';
+        $yaml = new Parser();
+        $normalizer = new Normalizer();
+        $mapper = new FilesystemMapper($path, $yaml, $normalizer);
 
-        $invoices = $this->mapper->all();
+        $invoices = $mapper->all();
 
         $defaults = array(
             'subtotal' => 0,
@@ -57,10 +54,12 @@ class PuliMapperTest extends \PHPUnit_Framework_TestCase
 
     public function testSingleEmptyFileWithGlobal()
     {
-        $this->repo->add('/app/invoices/_global.yml', new TestFile('/_global.yml', 'date: "2015-12-22"'));
-        $this->repo->add('/app/invoices/sample.yml', new TestFile('/sample.yml', ''));
+        $path = __DIR__ . '/FilesystemMapper/empty-w-global';
+        $yaml = new Parser();
+        $normalizer = new Normalizer();
+        $mapper = new FilesystemMapper($path, $yaml, $normalizer);
 
-        $invoices = $this->mapper->all();
+        $invoices = $mapper->all();
 
         $defaults = array(
             'subtotal' => 0,
@@ -84,11 +83,12 @@ class PuliMapperTest extends \PHPUnit_Framework_TestCase
 
     public function testMultipleFilesOrderByDate()
     {
-        $this->repo->add('/app/invoices/sample1.yml', new TestFile('/sample1.yml', 'date: "2015-12-22"'));
-        $this->repo->add('/app/invoices/sample2.yml', new TestFile('/sample2.yml', 'date: "2015-12-21"'));
-        $this->repo->add('/app/invoices/sample3.yml', new TestFile('/sample3.yml', 'date: "2015-12-22"'));
+        $path = __DIR__ . '/FilesystemMapper/order-dates';
+        $yaml = new Parser();
+        $normalizer = new Normalizer();
+        $mapper = new FilesystemMapper($path, $yaml, $normalizer);
 
-        $invoices = $this->mapper->all();
+        $invoices = $mapper->all();
 
         $this->assertInternalType('array', $invoices);
         $this->assertCount(3, $invoices);
@@ -100,18 +100,12 @@ class PuliMapperTest extends \PHPUnit_Framework_TestCase
 
     public function testSingleFileByNumber()
     {
-        $this->repo->add(
-            '/app/invoices/sample.yml',
-            new TestFile(
-                '/sample.yml',
-                "number: inv-123\n" .
-                "date: 2015-12-22\n" .
-                "items:\n" .
-                "    - other: value\n"
-            )
-        );
+        $path = __DIR__ . '/FilesystemMapper/by-number';
+        $yaml = new Parser();
+        $normalizer = new Normalizer();
+        $mapper = new FilesystemMapper($path, $yaml, $normalizer);
 
-        $invoice = $this->mapper->byNumber('inv-123');
+        $invoice = $mapper->byNumber('inv-123');
 
         $defaults = array(
             'other' => 'value',
@@ -134,7 +128,12 @@ class PuliMapperTest extends \PHPUnit_Framework_TestCase
 
     public function testMissingFileByNumber()
     {
-        $invoice = $this->mapper->byNumber('missing');
+        $path = __DIR__ . '/FilesystemMapper/by-number';
+        $yaml = new Parser();
+        $normalizer = new Normalizer();
+        $mapper = new FilesystemMapper($path, $yaml, $normalizer);
+
+        $invoice = $mapper->byNumber('missing');
 
         $this->assertEmpty($invoice);
     }

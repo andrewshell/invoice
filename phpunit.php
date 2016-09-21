@@ -1,4 +1,5 @@
 <?php
+define('INVOICE_ROOT', __DIR__);
 error_reporting(E_ALL);
 $autoloader = __DIR__ . '/vendor/autoload.php';
 if (! file_exists($autoloader)) {

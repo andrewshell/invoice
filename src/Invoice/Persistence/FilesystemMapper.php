@@ -5,19 +5,17 @@ namespace Invoice\Persistence;
 
 use Invoice\Domain\Mapper as DomainMapper;
 use Invoice\Domain\Normalizer;
-use Puli\Repository\Api\ResourceRepository;
-use Puli\Repository\Api\Resource\BodyResource;
 use Symfony\Component\Yaml\Parser;
 
-class PuliMapper implements DomainMapper
+class FilesystemMapper implements DomainMapper
 {
-    protected $repo;
+    protected $path;
     protected $yaml;
     protected $normalizer;
 
-    public function __construct(ResourceRepository $repo, Parser $yaml, Normalizer $normalizer)
+    public function __construct($path, Parser $yaml, Normalizer $normalizer)
     {
-        $this->repo = $repo;
+        $this->path = rtrim($path, DIRECTORY_SEPARATOR);
         $this->yaml = $yaml;
         $this->normalizer = $normalizer;
     }
@@ -40,12 +38,12 @@ class PuliMapper implements DomainMapper
     protected function readInvoices(): array
     {
         $invoices = array();
-        foreach ($this->repo->find('/app/invoices/*.yml') as $resource) {
-            $filename = $resource->getName();
-            if ('_' == $filename[0]) {
+        $yamlMatch = $this->path . DIRECTORY_SEPARATOR . '*.yml';
+        foreach (glob($yamlMatch)  as $filename) {
+            if ('_' == basename($filename)[0]) {
                 continue;
             }
-            $invoice = $this->readInvoice($resource);
+            $invoice = $this->readInvoice($filename);
             if (is_array($invoice)) {
                 $invoices[$invoice['number']] = $invoice;
             }
@@ -54,21 +52,21 @@ class PuliMapper implements DomainMapper
         return $invoices;
     }
 
-    protected function readInvoice(BodyResource $resource): array
+    protected function readInvoice($filename): array
     {
-        $invoice = $this->yaml->parse($resource->getBody());
+        $invoice = $this->yaml->parse(file_get_contents($filename));
         if (!is_array($invoice)) {
             $invoice = [];
         }
         $invoice = array_merge($this->readGlobalData(), $invoice);
-        return $this->normalizer->normalize($invoice, basename($resource->getName(), '.yml'));
+        return $this->normalizer->normalize($invoice, basename($filename, '.yml'));
     }
 
     protected function readGlobalData(): array
     {
-        if ($this->repo->contains('/app/invoices/_global.yml')) {
-            $resource = $this->repo->get('/app/invoices/_global.yml');
-            $globalData = $this->yaml->parse($resource->getBody());
+        $filename = $this->path . DIRECTORY_SEPARATOR . '_global.yml';
+        if (file_exists($filename)) {
+            $globalData = $this->yaml->parse(file_get_contents($filename));
         }
         if (empty($globalData)) {
             $globalData = array();

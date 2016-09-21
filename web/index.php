@@ -15,6 +15,8 @@ if (php_sapi_name() === 'cli-server' && is_file($filename)) {
  */
 require '../vendor/autoload.php';
 
+define('INVOICE_ROOT', realpath(__DIR__ . '/../'));
+
 $boot = new Boot();
 $adr = $boot->adr([
     'Cadre\Core\Config',
@@ -38,9 +40,9 @@ $adr->responder('Cadre\Core\Responder\TwigResponder');
  * Routes
  */
 $adr->get('ListAllInvoices', '/', 'Invoice\Domain\Action\ListAllInvoices')
-    ->defaults(['_view' => '/app/views/index.twig.html']);
+    ->defaults(['_view' => 'index.twig.html']);
 $adr->get('ViewSingleInvoice', '/{number}', 'Invoice\Domain\Action\ViewSingleInvoice')
-    ->defaults(['_view' => '/app/views/invoice.twig.html']);
+    ->defaults(['_view' => 'invoice.twig.html']);
 
 /**
  * Run

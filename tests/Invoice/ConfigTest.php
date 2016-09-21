@@ -18,14 +18,14 @@ class ConfigTest extends AbstractContainerConfigTest
     public function provideGet()
     {
         return [
-            ['invoice/domain:mapper', 'Invoice\Persistence\PuliMapper'],
+            ['invoice/domain:mapper', 'Invoice\Persistence\FilesystemMapper'],
         ];
     }
 
     public function provideNewInstance()
     {
         return [
-            ['Invoice\Persistence\PuliMapper'],
+            ['Invoice\Persistence\FilesystemMapper'],
             ['Invoice\Domain\Action\ListAllInvoices'],
             ['Invoice\Domain\Action\ViewSingleInvoice'],
         ];

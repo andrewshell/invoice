@@ -13,14 +13,14 @@ class Config extends ContainerConfig
         /**
          * Services
          */
-        $di->set('invoice/domain:mapper', $di->lazyNew('Invoice\Persistence\PuliMapper'));
+        $di->set('invoice/domain:mapper', $di->lazyNew('Invoice\Persistence\FilesystemMapper'));
 
         /**
          * Invoice Mapper
          */
-        $di->params['Invoice\Persistence\PuliMapper']['repo'] = $di->lazyGet('puli:repo');
-        $di->params['Invoice\Persistence\PuliMapper']['yaml'] = $di->lazyNew('Symfony\Component\Yaml\Parser');
-        $di->params['Invoice\Persistence\PuliMapper']['normalizer'] = $di->lazyNew('Invoice\Domain\Normalizer');
+        $di->params['Invoice\Persistence\FilesystemMapper']['path'] = INVOICE_ROOT . '/res/invoices';
+        $di->params['Invoice\Persistence\FilesystemMapper']['yaml'] = $di->lazyNew('Symfony\Component\Yaml\Parser');
+        $di->params['Invoice\Persistence\FilesystemMapper']['normalizer'] = $di->lazyNew('Invoice\Domain\Normalizer');
 
         /**
          * ListAllInvoices
@@ -37,6 +37,5 @@ class Config extends ContainerConfig
     {
         $twig = $di->get('twig');
         $twig->addExtension($di->newInstance('Twig_Extension_Debug'));
-        $twig->addExtension($di->newInstance('Puli\TwigExtension\PuliExtension'));
     }
 }

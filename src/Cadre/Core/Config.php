@@ -14,16 +14,13 @@ class Config extends ContainerConfig
          * Services
          */
         $di->set('cadre/core:twig_responder', $di->lazyNew('Cadre\Core\Responder\TwigResponder'));
-        $di->set('puli:factory', $di->lazyNew(PULI_FACTORY_CLASS));
-        $di->set('puli:repo', $di->lazyGetCall('puli:factory', 'createRepository'));
         $di->set('twig', $di->lazyNew('Twig_Environment'));
 
         /**
          * Twig_Environment
          */
-        $di->params['Puli\TwigExtension\PuliTemplateLoader']['repo'] = $di->lazyGet('puli:repo');
-        $di->params['Puli\TwigExtension\PuliExtension']['repo'] = $di->lazyGet('puli:repo');
-        $di->params['Twig_Environment']['loader'] = $di->lazyNew('Puli\TwigExtension\PuliTemplateLoader');
+        $di->params['Twig_Loader_Filesystem']['paths'] = INVOICE_ROOT . '/res/views';
+        $di->params['Twig_Environment']['loader'] = $di->lazyNew('Twig_Loader_Filesystem');
         $di->params['Twig_Environment']['options'] = ['debug' => true, 'strict_variables' => true];
 
         /**
